@@ -1,16 +1,16 @@
-import { findUsers, findUserById, create, getDataBody } from "./Model.js";
+import { error400, error404, status200, status201 } from "./Error.js";
+import { findUsers, findUserById, create, getDataBody, change, deleteUserById } from "./Model.js";
 
 const getUsers = async (req, res) => {
 
   try {
     const allUsers = await findUsers();
 
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(allUsers));
+    status200(res, allUsers);
 
   } catch (error) {
-    console.log(error);
-  }
+    error404(res, error);
+  };
 
 };
 
@@ -19,20 +19,11 @@ const getUser = async (req, res, userId) => {
   try {
 
     const user = await findUserById(userId);
-
-    if (user) {
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify(user));
-    } else {
-      //if invalid code 400
-      res.writeHead(404, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ message: 'User not found' }));
-    };
+    status200(res, user);
 
   } catch (error) {
-    console.log(error);
-  }
-
+    error404(res, error);
+  };
 };
 
 const setUser = async (req, res) => {
@@ -40,25 +31,39 @@ const setUser = async (req, res) => {
     const body = await getDataBody(req);
     const newUser = await create(JSON.parse(body));
 
-    res.writeHead(201, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify(newUser));
+    status201(res, newUser);
 
   } catch (error) {
-    res.writeHead(404, { 'Content-Type': 'application/json' });
-    res.end({ message: error });
-    console.log(error);
+    error400(res, error);
   };
 };
 
 const changeUser = async (req, res, userId) => {
-  const user = await findUserById(userId);
+  try {
+    const user = await findUserById(userId);
+    const body = await getDataBody(req);
+    const userBody = JSON.parse(body);
+    const changedData = await change(userBody, user);
+
+    status200(res, changedData);
+
+  } catch (error) {
+   error404(res, error);
+  }
 
 };
 
-const pageNotFound = (res) => {
-  res.statusCode = 404;
-  res.setHeader('Content-Type', 'application/json');
-  res.end(JSON.stringify({ message: 'Page not found' }));
+const deleteUser = async (req, res, userId) => {
+  try {
+    const user = await findUserById(userId);
+    const getNewData = await deleteUserById(userId);
+
+    status200(res, getNewData);
+
+  } catch (error) {
+    error404(res, error);
+  };
+
 };
 
 export {
@@ -66,5 +71,5 @@ export {
   getUser,
   setUser,
   changeUser,
-  pageNotFound
+  deleteUser
 };

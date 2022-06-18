@@ -1,7 +1,6 @@
 import apiData from './apiData.json' assert { type: 'json' };
 import { v4 as uuidv4 } from 'uuid';
 import { writeFile } from 'fs';
-import { resolve } from 'path';
 
 const findUsers = () => {
   return new Promise((response, reject) => {
@@ -16,57 +15,116 @@ const findUsers = () => {
 const findUserById = (userId) => {
   return new Promise((response, reject) => {
     try {
-      const product = apiData.find(item => {
+      const user = apiData.find(item => {
         return item.id === userId;
       });
-      response(product);
+
+      if (!user) {
+        reject(new Error('User not found.'));
+      };
+
+      response(user);
     } catch (error) {
-      reject('Failed input.');
+      console.log(error);
     };
   });
 };
 
-const create = (prod) => {
+const create = (user) => {
   return new Promise((resolve, reject) => {
-    const newUser = { id: uuidv4(), ...prod };
+    const newUser = { id: uuidv4(), ...user };
 
     try {
       if (Object.values(newUser).length === 4) {
-        const data = JSON.stringify([...apiData, newUser]);
 
-        writeFile('src/apiData.json', data, err => {
-          if (err) {
-            console.log(err);
-          };
-        });
+        writeDataToJson([...apiData, newUser]);
         resolve(newUser);
 
       } else {
-        throw new Error('Fill in required fields.');
+        reject(new Error('Fill in required fields.'));
       }
 
     } catch (error) {
-      reject(error);
+      console.log(err)
     };
   });
 };
 
 const getDataBody = (req) => {
-  return new Promise((resolve, reject)=>{
+  return new Promise((resolve, reject) => {
     try {
       let body = '';
 
       req.on('data', data => {
         body += data.toString();
       });
-  
+
       req.on('end', async () => {
-         resolve(body);
+        resolve(body);
       });
     } catch (error) {
-      reject(error);
+      reject(new Error('Invalid request.'));
     }
   });
+
+};
+
+const change = (newBody, user) => {
+  return new Promise((resolve, reject) => {
+    try {
+      const newData = apiData.map(item => item.id === user.id ? item = { ...item, ...newBody } : item);
+      if (newData) {
+
+
+        writeDataToJson(newData);
+
+        resolve(newData);
+      } else {
+        reject(new Error('Operation failed'));
+      };
+
+    } catch (error) {
+      console.log(error);
+    };
+
+  });
+};
+
+const deleteUserById = (userId) => {
+  return new Promise((resolve, reject) => {
+    try {
+
+      const newData = apiData.filter(item => {
+        if (item.id !== userId) {
+          return item;
+        };
+      });
+
+      if (newData.length === apiData.length) {
+        reject(new Error('Operation failed.'))
+      };
+
+      writeDataToJson(newData);
+      resolve(newData);
+    } catch (error) {
+      console.log(error);
+    };
+  });
+
+};
+
+const writeDataToJson = (data) => {
+  try {
+    
+    writeFile('src/apiData.json', JSON.stringify(data), err => {
+      if (err) {
+        throw new Error('Operation failed');
+      };
+    });
+
+  } catch (error) {
+    throw new Error('Operation failed');
+  };
 
 };
 
@@ -74,5 +132,7 @@ export {
   findUsers,
   findUserById,
   create,
+  change,
+  deleteUserById,
   getDataBody
 };

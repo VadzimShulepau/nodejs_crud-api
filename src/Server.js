@@ -1,5 +1,6 @@
 import http from 'http';
-import { getUsers, getUser, setUser, pageNotFound, changeUser } from './Controller.js';
+import { getUsers, getUser, setUser, changeUser, deleteUser } from './Controller.js';
+import { pageNotFound } from './Error.js';
 
 const PORT = 3000 || process.env.PORT;
 
@@ -15,9 +16,9 @@ export const server = http.createServer((req, res) => {
 
       } else if (req.url.match(idParse)) {
 
-        const id = req.url.split('/')[3];
+        const userId = req.url.split('/')[3];
 
-        getUser(req, res, id);
+        getUser(req, res, userId);
 
       } else {
         pageNotFound(res);
@@ -35,16 +36,28 @@ export const server = http.createServer((req, res) => {
     case 'PUT':
       if (req.url.match(idParse)) {
 
-        const id = req.url.split('/')[3];
+        const userId = req.url.split('/')[3];
 
-        changeUser(req, res, id);
+        changeUser(req, res, userId);
 
       } else {
         pageNotFound(res);
       };
       break;
-    default:
 
+    case 'DELETE':
+      if (req.url.match(idParse)) {
+
+        const userId = req.url.split('/')[3];
+
+        deleteUser(req, res, userId);
+
+      } else {
+        pageNotFound(res);
+      }
+      break;
+    default:
+      pageNotFound(res);
       break;
   };
 
