@@ -27,18 +27,29 @@ const findUserById = (userId) => {
 
 const create = (prod) => {
   return new Promise((resolve, reject) => {
+    const newUser = { id: uuidv4(), ...prod };
+    console.log(Object.values(newUser).length)
     try {
-      const newUser = { id: uuidv4(), ...prod };
-      const data = JSON.stringify([...apiData, newUser]);
+      if (Object.values(newUser).length === 4) {
+        const data = JSON.stringify([...apiData, newUser]);
+        // Object.values(newUser).forEach(item => {
+          // if (item === '' || item == null) {
+            // throw new Error('Fill in required fields.');
+          // } else {
+            writeFile('src/data/apiData.json', data, err => {
+              if (err) {
+                console.log(err);
+              };
+            });
+            resolve(newUser);
+          // };
+        // });
+      } else {
+        throw new Error('Fill in required fields.');
+      }
 
-      writeFile('src/data/apiData.json', data, err => {
-        if (err) {
-          console.log(err);
-        };
-      });
-      resolve(newUser);
     } catch (error) {
-      reject('Failed input.');
+      reject(error);
     };
   });
 };

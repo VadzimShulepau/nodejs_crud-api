@@ -1,4 +1,4 @@
-import { findUsers, findUserById, create } from "../models/Model.js";
+import { findUsers, findUserById, create } from "./Model.js";
 
 const getUsers = async (req, res) => {
 
@@ -40,7 +40,7 @@ const getUser = async (req, res, userId) => {
 
 const setUser = async (req, res) => {
   try {
-    
+
     let body = '';
 
     req.on('data', data => {
@@ -56,14 +56,21 @@ const setUser = async (req, res) => {
     });
 
   } catch (error) {
-
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    res.end({ message: error });
     console.log(error);
-
   };
+};
+
+const pageNotFound = (res) => {
+  res.statusCode = 404;
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify({ message: 'Page not found' }));
 };
 
 export {
   getUsers,
   getUser,
-  setUser
+  setUser,
+  pageNotFound
 };
