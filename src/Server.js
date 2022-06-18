@@ -1,12 +1,12 @@
 import http from 'http';
-import { getUsers, getUser, setUser, pageNotFound } from './Controller.js';
+import { getUsers, getUser, setUser, pageNotFound, changeUser } from './Controller.js';
 
 const PORT = 3000 || process.env.PORT;
 
 const idParse = /\/api\/users\/([0-9]+)/;
 
 export const server = http.createServer((req, res) => {
-  
+
   switch (req.method) {
     case 'GET':
       if (req.url === '/api/users') {
@@ -32,6 +32,17 @@ export const server = http.createServer((req, res) => {
       };
       break;
 
+    case 'PUT':
+      if (req.url.match(idParse)) {
+
+        const id = req.url.split('/')[3];
+
+        changeUser(req, res, id);
+
+      } else {
+        pageNotFound(res);
+      };
+      break;
     default:
 
       break;

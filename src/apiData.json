@@ -1,0 +1,20 @@
+[
+  {
+    "id": "1",
+    "name": "Vadzim",
+    "age": "35",
+    "hobbies": "Exercitation fugiat ad sint nostrud in et laboris. Cupidatat non incididunt ea commodo elit minim ex ea duis exercitation irure do. Ex occaecat sint ea nostrud ea ea ut excepteur ea nulla ullamco amet culpa. Non ad occaecat labore sint cupidatat."
+  },  
+  {
+    "id": "2",
+    "name": "Jakub",
+    "age": "34",
+    "hobbies": "Exercitation fugiat ad sint nostrud in et laboris. Cupidatat non incididunt ea commodo elit minim ex ea duis exercitation irure do. Ex occaecat sint ea nostrud ea ea ut excepteur ea nulla ullamco amet culpa. Non ad occaecat labore sint cupidatat."
+  },
+  {
+    "id": "3",
+    "name": "Jan",
+    "age": "33",
+    "hobbies": "Exercitation fugiat ad sint nostrud in et laboris. Cupidatat non incididunt ea commodo elit minim ex ea duis exercitation irure do. Ex occaecat sint ea nostrud ea ea ut excepteur ea nulla ullamco amet culpa. Non ad occaecat labore sint cupidatat."
+  }
+]

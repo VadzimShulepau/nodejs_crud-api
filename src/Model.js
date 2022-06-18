@@ -1,6 +1,7 @@
-import apiData from '../data/apiData.json' assert { type: 'json' };
+import apiData from './apiData.json' assert { type: 'json' };
 import { v4 as uuidv4 } from 'uuid';
 import { writeFile } from 'fs';
+import { resolve } from 'path';
 
 const findUsers = () => {
   return new Promise((response, reject) => {
@@ -28,22 +29,18 @@ const findUserById = (userId) => {
 const create = (prod) => {
   return new Promise((resolve, reject) => {
     const newUser = { id: uuidv4(), ...prod };
-    console.log(Object.values(newUser).length)
+
     try {
       if (Object.values(newUser).length === 4) {
         const data = JSON.stringify([...apiData, newUser]);
-        // Object.values(newUser).forEach(item => {
-          // if (item === '' || item == null) {
-            // throw new Error('Fill in required fields.');
-          // } else {
-            writeFile('src/data/apiData.json', data, err => {
-              if (err) {
-                console.log(err);
-              };
-            });
-            resolve(newUser);
-          // };
-        // });
+
+        writeFile('src/apiData.json', data, err => {
+          if (err) {
+            console.log(err);
+          };
+        });
+        resolve(newUser);
+
       } else {
         throw new Error('Fill in required fields.');
       }
@@ -54,8 +51,28 @@ const create = (prod) => {
   });
 };
 
+const getDataBody = (req) => {
+  return new Promise((resolve, reject)=>{
+    try {
+      let body = '';
+
+      req.on('data', data => {
+        body += data.toString();
+      });
+  
+      req.on('end', async () => {
+         resolve(body);
+      });
+    } catch (error) {
+      reject(error);
+    }
+  });
+
+};
+
 export {
   findUsers,
   findUserById,
-  create
+  create,
+  getDataBody
 };
