@@ -1,13 +1,18 @@
 import apiData from './apiData.json' assert { type: 'json' };
 import { writeFile } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
+import { resolve } from 'path';
 
 const findUsers = () => {
   return new Promise((response, reject) => {
     try {
-      response(apiData);
+      if (apiData) {
+        response(apiData);
+      } else {
+        reject('Data failed or not found');
+      }
     } catch (error) {
-      reject('Data failed or not found');
+      console.log(error);
     };
   });
 };
@@ -15,9 +20,7 @@ const findUsers = () => {
 const findUserById = (userId) => {
   return new Promise((response, reject) => {
     try {
-      const user = apiData.find(item => {
-        return item.id === userId;
-      });
+      const user = apiData.find(item => item.id === userId);
 
       if (!user) {
         reject(new Error('User not found.'));
@@ -42,7 +45,7 @@ const create = (user) => {
 
       } else {
         reject(new Error('Fill in required fields.'));
-      }
+      };
 
     } catch (error) {
       console.log(err)
@@ -64,7 +67,7 @@ const getDataBody = (req) => {
       });
     } catch (error) {
       reject(new Error('Invalid request.'));
-    }
+    };
   });
 
 };
@@ -94,6 +97,9 @@ const deleteUserById = (userId) => {
     try {
       const newData = apiData.filter(item => item.id !== userId && item);
 
+      if(!newData){
+        reject(new Error('User not found.'));
+      };
       if (newData.length === apiData.length) {
         reject(new Error('Operation failed.'))
       };
@@ -112,7 +118,7 @@ const writeDataToJson = (data) => {
   const operationFailed = 'Operation failed';
   try {
 
-    writeFile('src/apiData.json', JSON.stringify(data), err => {
+    writeFile(resolve(process.cwd(), 'src', 'apiData.json'), JSON.stringify(data), err => {
       if (err) {
         throw new Error(operationFailed);
       };

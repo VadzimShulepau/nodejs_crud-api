@@ -64,11 +64,10 @@ const deleteUser = async (req, res) => {
   try {
     const userId = await getID(req);
 
-    validateUserId(res, userId);
-
-    const getNewData = await deleteUserById(userId);
-    status200(res, getNewData);
-
+    if (validateUserId(res, userId)) {
+      const getNewData = await deleteUserById(userId);
+      status200(res, getNewData);
+    };
   } catch (error) {
     console.log(error);
   };
@@ -80,9 +79,18 @@ const getID = (req) => {
   return userId;
 };
 
-const validateUserId = (res, userId) => {
-  if (!validate(userId)) error400(res, { message: 'Unimportant ID.' });
-  if (!userId) error404(res, { message: 'User not found.' });
+const validateUserId = async (res, userId) => {
+  try {
+    if (!validate(userId)) {
+      error400(res, { message: 'Unimportant ID.' });
+      return false;
+    };
+
+    const user = await findUserById(userId);
+   
+  } catch (error) {
+    error404(res, error);
+  };
 };
 
 export {

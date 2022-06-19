@@ -1,7 +1,9 @@
 import http from 'http';
 import { getUsers, getUser, setUser, changeUser, deleteUser } from './Controller.js';
 import { pageNotFound, serverError } from './Error.js';
+import 'dotenv/config';
 
+console.log('PORT: '+ process.env.PORT)
 const PORT = 3000 || process.env.PORT;
 
 const server = http.createServer((req, res) => {
@@ -12,7 +14,7 @@ const server = http.createServer((req, res) => {
 
         getUsers(req, res);
 
-      } else if (req.url.split('/').length >= 3) {
+      } else if (req.url.split('/').length > 3) {
 
         getUser(req, res);
 

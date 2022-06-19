@@ -1,20 +1,14 @@
 [
   {
-    "id": "1",
-    "username": "Vadzim",
-    "age": "35",
-    "hobbies": "Exercitation fugiat ad sint nostrud in et laboris. Cupidatat non incididunt ea commodo elit minim ex ea duis exercitation irure do. Ex occaecat sint ea nostrud ea ea ut excepteur ea nulla ullamco amet culpa. Non ad occaecat labore sint cupidatat."
-  },
-  {
-    "id": "949d5c45-e0e5-4727-8929-60f8c6a58be9",
-    "username": "Zetta",
-    "age": 23,
+    "id": "dcc659cb-2cb5-42ab-8d9c-7e7362797f12",
+    "username": "Den",
+    "age": 26,
     "hobbies": "Exercitation fugiat ad sint nostrud in et laboris."
   },
   {
-    "id": "ffe499ee-0e44-448c-ad34-79473abf5ad5",
-    "username": "Jan",
-    "age": 43,
+    "id": "594dec77-0f0f-483c-9ffb-51b043f22841",
+    "username": "Mike",
+    "age": 24,
     "hobbies": "Exercitation fugiat ad sint nostrud in et laboris."
   }
 ]
