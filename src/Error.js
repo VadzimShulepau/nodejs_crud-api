@@ -20,10 +20,10 @@ const error404 = (res, error) => {
   console.log(error);
 };
 
-const serverError = (res) => {
+const serverError = (res, err) => {
   res.statusCode = 500;
   res.setHeader('Content-Type', 'application/json');
-  res.end('Server side error.');
+  res.end(`Server side error. Error: ${err.message}`);
 };
 
 const pageNotFound = (res) => {

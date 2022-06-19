@@ -1,6 +1,6 @@
 import { validate } from "uuid";
 import { error400, error404, status200, status201 } from "./Error.js";
-import { findUsers, findUserById, create, getDataBody, change, deleteUserById } from "./Model.js";
+import { findUsers, findUserById, create, getDataBody, change, deleteUserById, deleteData } from "./Model.js";
 
 const getUsers = async (req, res) => {
 
@@ -87,10 +87,14 @@ const validateUserId = async (res, userId) => {
     };
 
     const user = await findUserById(userId);
-   
+
   } catch (error) {
     error404(res, error);
   };
+};
+
+const clearData = (data) => {
+  deleteData(data);
 };
 
 export {
@@ -98,5 +102,6 @@ export {
   getUser,
   setUser,
   changeUser,
-  deleteUser
+  deleteUser,
+  clearData
 };

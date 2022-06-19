@@ -1,4 +1,4 @@
-import apiData from './apiData.json' assert { type: 'json' };
+import apiData from '../apiData.json' assert { type: 'json' };
 import { writeFile } from 'fs';
 import { v4 as uuidv4 } from 'uuid';
 import { resolve } from 'path';
@@ -9,7 +9,7 @@ const findUsers = () => {
       if (apiData) {
         response(apiData);
       } else {
-        reject('Data failed or not found');
+        reject(new Error('Data failed or not found'));
       }
     } catch (error) {
       console.log(error);
@@ -97,7 +97,7 @@ const deleteUserById = (userId) => {
     try {
       const newData = apiData.filter(item => item.id !== userId && item);
 
-      if(!newData){
+      if (!newData) {
         reject(new Error('User not found.'));
       };
       if (newData.length === apiData.length) {
@@ -117,8 +117,10 @@ const deleteUserById = (userId) => {
 const writeDataToJson = (data) => {
   const operationFailed = 'Operation failed';
   try {
-
-    writeFile(resolve(process.cwd(), 'src', 'apiData.json'), JSON.stringify(data), err => {
+    let jsonData = JSON.stringify(data);
+    const dataPath = resolve(process.cwd(), 'apiData.json');
+    
+    writeFile(dataPath, jsonData, err => {
       if (err) {
         throw new Error(operationFailed);
       };
@@ -130,7 +132,9 @@ const writeDataToJson = (data) => {
 
 };
 
-
+const deleteData = (data) => {
+  writeDataToJson(data);
+};
 
 export {
   findUsers,
@@ -138,5 +142,6 @@ export {
   create,
   change,
   deleteUserById,
-  getDataBody
+  getDataBody,
+  deleteData
 };

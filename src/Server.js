@@ -1,10 +1,8 @@
 import http from 'http';
 import { getUsers, getUser, setUser, changeUser, deleteUser } from './Controller.js';
 import { pageNotFound, serverError } from './Error.js';
-import 'dotenv/config';
 
-console.log('PORT: '+ process.env.PORT)
-const PORT = 3000 || process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 const server = http.createServer((req, res) => {
 
@@ -48,7 +46,11 @@ const server = http.createServer((req, res) => {
       };
       break;
     default:
-      serverError(res);
+      try {
+        res, req, res;
+      } catch (error) {
+        serverError(res, error);
+      }
       break;
   };
 
@@ -56,4 +58,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`Server started on port : ${PORT}`);
+  process.on('SIGINT', () => {
+    process.exit();
+  });
 });

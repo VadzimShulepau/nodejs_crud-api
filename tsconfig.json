@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "es6",
     "outDir": "./dist",
     "rootDir": "./src",
@@ -13,7 +13,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "lib": ["es6"],
+  "lib": ["es2015"],
   "include": ["src/*.js", "src/*.json"],
   "exclude": ["./node_modules"]
 }

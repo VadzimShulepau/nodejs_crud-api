@@ -1,5 +1,6 @@
 import cluster from "cluster";
 import { cpus } from "os";
+import 'dotenv/config';
 
 const cpusLength = cpus().length;
 
