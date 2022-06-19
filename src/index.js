@@ -1,4 +1,3 @@
-
-(function () {
-  import ('./Server.js');
+(async function () {
+  await import ('./Cluster.js');
 })();

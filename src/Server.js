@@ -1,12 +1,10 @@
 import http from 'http';
 import { getUsers, getUser, setUser, changeUser, deleteUser } from './Controller.js';
-import { pageNotFound } from './Error.js';
+import { pageNotFound, serverError } from './Error.js';
 
 const PORT = 3000 || process.env.PORT;
 
-const idParse = /\/api\/users\/([0-9]+)/;
-
-export const server = http.createServer((req, res) => {
+const server = http.createServer((req, res) => {
 
   switch (req.method) {
     case 'GET':
@@ -14,11 +12,9 @@ export const server = http.createServer((req, res) => {
 
         getUsers(req, res);
 
-      } else if (req.url.match(idParse)) {
+      } else if (req.url.split('/').length >= 3) {
 
-        const userId = req.url.split('/')[3];
-
-        getUser(req, res, userId);
+        getUser(req, res);
 
       } else {
         pageNotFound(res);
@@ -34,30 +30,23 @@ export const server = http.createServer((req, res) => {
       break;
 
     case 'PUT':
-      if (req.url.match(idParse)) {
-
-        const userId = req.url.split('/')[3];
-
-        changeUser(req, res, userId);
-
+      if (req.url) {
+        changeUser(req, res);
       } else {
         pageNotFound(res);
       };
       break;
 
     case 'DELETE':
-      if (req.url.match(idParse)) {
-
-        const userId = req.url.split('/')[3];
-
-        deleteUser(req, res, userId);
+      if (req.url) {
+        deleteUser(req, res);
 
       } else {
         pageNotFound(res);
-      }
+      };
       break;
     default:
-      pageNotFound(res);
+      serverError(res);
       break;
   };
 

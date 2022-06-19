@@ -10,8 +10,8 @@ const status201 = (res, data) => {
 
 const error400 = (res, error) => {
   res.writeHead(400, { 'Content-Type': 'application/json' });
-    res.end(error.message);
-    console.log(error)
+  res.end(error.message);
+  console.log(error)
 };
 
 const error404 = (res, error) => {

@@ -1,6 +1,6 @@
 import apiData from './apiData.json' assert { type: 'json' };
-import { v4 as uuidv4 } from 'uuid';
 import { writeFile } from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
 const findUsers = () => {
   return new Promise((response, reject) => {
@@ -73,9 +73,8 @@ const change = (newBody, user) => {
   return new Promise((resolve, reject) => {
     try {
       const newData = apiData.map(item => item.id === user.id ? item = { ...item, ...newBody } : item);
+
       if (newData) {
-
-
         writeDataToJson(newData);
 
         resolve(newData);
@@ -93,12 +92,7 @@ const change = (newBody, user) => {
 const deleteUserById = (userId) => {
   return new Promise((resolve, reject) => {
     try {
-
-      const newData = apiData.filter(item => {
-        if (item.id !== userId) {
-          return item;
-        };
-      });
+      const newData = apiData.filter(item => item.id !== userId && item);
 
       if (newData.length === apiData.length) {
         reject(new Error('Operation failed.'))
@@ -106,6 +100,7 @@ const deleteUserById = (userId) => {
 
       writeDataToJson(newData);
       resolve(newData);
+
     } catch (error) {
       console.log(error);
     };
@@ -114,19 +109,22 @@ const deleteUserById = (userId) => {
 };
 
 const writeDataToJson = (data) => {
+  const operationFailed = 'Operation failed';
   try {
-    
+
     writeFile('src/apiData.json', JSON.stringify(data), err => {
       if (err) {
-        throw new Error('Operation failed');
+        throw new Error(operationFailed);
       };
     });
 
   } catch (error) {
-    throw new Error('Operation failed');
+    throw new Error(operationFailed);
   };
 
 };
+
+
 
 export {
   findUsers,
