@@ -47,7 +47,7 @@ const server = http.createServer((req, res) => {
       break;
     default:
       try {
-        res, req, res;
+        res, req;
       } catch (error) {
         serverError(res, error);
       }
